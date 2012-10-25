@@ -1,5 +1,4 @@
 SQL Extractor
 =============
 
-MS Sql Server Schema Extraction command line utility.
-
+CLI Tool to extract View/StoredProc/...-Definitions from an SQL-Server to track them in a versioning system
