@@ -1,0 +1,9 @@
+server=NOTEBOOK\SQLEXPRESS
+db=AdventureWorks2012
+pwd=
+user=
+
+dest=c:\tmp\sql\test1
+
+filter_type=VIEW
+filter_name=%

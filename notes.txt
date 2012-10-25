@@ -1,0 +1,9 @@
+﻿
+ToDo
+	*) Refactor, that more than one Extraction can happen with one run
+	*) Better error handling
+	*) 
+
+Ideas:
+	*) Erweitern um TableDefs: http://stackoverflow.com/questions/6215459/t-sql-query-to-show-table-definition
+		(Seems to be slow... smart methode to check if schema has changed... eg. hash of all results of exec sp_help <table>)
