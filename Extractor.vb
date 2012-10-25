@@ -4,19 +4,25 @@ Imports System.Collections.Generic
 Imports System.Data
 
 Public Class Extractor
-    Public object_filter As New List(Of String)
-    Public type_filter As New List(Of String)
+    Public Property ExtractorName As String
 
-    Public where As String = ""
+    Public Property object_filter As New List(Of String)
+    Public Property type_filter As New List(Of String)
 
-    Public DB_server As String
-    Public DB_user As String
-    Public DB_pwd As String
-    Public DB_name As String
+    Public Property where As String = ""
 
-    Public folder_dest As String
+    Public Property DB_server As String
+    Public Property DB_user As String
+    Public Property DB_pwd As String
+    Public Property DB_name As String
+
+    Public Property folder_dest As String
 
     Public Event LogMessage(msg As String, isError As Boolean)
+
+    Sub New(Optional ExtractorName As String = "")
+        Me.ExtractorName = ExtractorName
+    End Sub
 
     Private Sub log(msg As String, Optional isErr As Boolean = False)
         RaiseEvent LogMessage(msg, isErr)
@@ -51,10 +57,6 @@ Public Class Extractor
         Dim cn As New SqlConnection(cs.ConnectionString)
         Return cn
     End Function
-
-    Sub New()
-
-    End Sub
 
     Function StartExtract() As Integer
 
@@ -111,7 +113,11 @@ Public Class Extractor
                         log("Error while exporting")
                     End If
                 End While
-
+            Else
+                log("No objects match current Filter")
+                log("  Type: " & String.Join(", ", Me.type_filter))
+                log("  Filter: " & String.Join(", ", Me.object_filter))
+                log("  Where: " & Me.where)
             End If
 
         End Using

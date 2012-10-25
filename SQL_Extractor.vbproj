@@ -109,7 +109,7 @@
   <ItemGroup>
     <Compile Include="Extractor.vb" />
     <Compile Include="lib\tools.vb" />
-    <Compile Include="Module1.vb" />
+    <Compile Include="Main.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>

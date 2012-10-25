@@ -5,5 +5,16 @@ user=
 
 dest=c:\tmp\sql\test1
 
-filter_type=VIEW
-filter_name=%
+type=VIEW
+filter=%v
+
+[test2]
+server=NOTEBOOK\SQLEXPRESS
+db=AdventureWorks2012
+pwd=
+user=
+
+dest=c:\tmp\sql\test2
+
+type=VIEW
+filter=%
