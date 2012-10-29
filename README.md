@@ -12,6 +12,10 @@ Maybe I'll extend this tool for further usecases - or you can also fork and exte
 
 With SQL_Extractor I have now a quick method to dump all/some definitions to separate files and track them combined with the application source-code with my code versioning system (git in my case)
 
+## Download
+
+Use the source to compile your own or download the attached precompiled .exe -> See Tab [Downloads](https://github.com/DanielWeigl/SQL_Extractor/downloads)
+
 ## Command Line
 (all options in one line)
 
