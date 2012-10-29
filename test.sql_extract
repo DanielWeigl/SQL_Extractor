@@ -6,7 +6,9 @@ user=
 dest=c:\tmp\sql\test1
 
 type=VIEW
-filter=%v
+filter=%
+versions=5
+header=false
 
 [test2]
 server=NOTEBOOK\SQLEXPRESS

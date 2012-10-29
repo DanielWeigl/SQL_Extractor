@@ -118,7 +118,9 @@ Module Main
             Dim para As String = segs(0)
             Dim arg As String = segs(1)
 
-            If para = "db" Then
+            If para = "connection" Then
+                current_ex.DB_connection_string = arg
+            ElseIf para = "db" Then
                 current_ex.DB_name = arg
             ElseIf para = "server" Then
                 current_ex.DB_server = arg
@@ -134,6 +136,12 @@ Module Main
                 current_ex.type_filter.Add(arg)
             ElseIf para = "where" Then
                 current_ex.where = arg
+            ElseIf para = "header" Then
+                current_ex.output_header = paraTrue(arg)
+            ElseIf para = "header_date" Then
+                current_ex.output_header_timestamp = paraTrue(arg)
+            ElseIf para = "versions" Then
+                current_ex.output_versions = CInt(arg)
             Else
                 ex_LogMessage(String.Format("Unknown parameter {0}", line))
                 Return False
@@ -143,6 +151,10 @@ Module Main
 
     End Function
 
+    Private Function paraTrue(ByVal para As String)
+        para = para.ToLower
+        Return para = "1" OrElse para = "true" OrElse para = "yes"
+    End Function
 
 
     Private Sub ex_LogMessage(msg As String, Optional isError As Boolean = False)

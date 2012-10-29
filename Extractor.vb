@@ -21,6 +21,7 @@ Imports System.IO
 Imports System.Data.SqlClient
 Imports System.Collections.Generic
 Imports System.Data
+Imports System.Text
 
 Public Class Extractor
     Public Property ExtractorName As String
@@ -30,12 +31,17 @@ Public Class Extractor
 
     Public Property where As String = ""
 
-    Public Property DB_server As String
-    Public Property DB_user As String
-    Public Property DB_pwd As String
-    Public Property DB_name As String
+    Public Property DB_connection_string As String = ""
+    Public Property DB_server As String = ""
+    Public Property DB_user As String = ""
+    Public Property DB_pwd As String = ""
+    Public Property DB_name As String = ""
 
     Public Property folder_dest As String
+
+    Public Property output_header As Boolean = True
+    Public Property output_header_timestamp As Boolean = False
+    Public Property output_versions As Integer = -1
 
     Public Event LogMessage(msg As String, isError As Boolean)
 
@@ -48,14 +54,17 @@ Public Class Extractor
     End Sub
 
     Private Function checkSettings() As Boolean
-        If DB_server = "" Then
-            log("Kein DB_server angegeben")
-            Return False
-        End If
 
-        If DB_name = "" Then
-            log("Kein DB_name angegeben")
-            Return False
+        If DB_connection_string = "" Then
+            If DB_server = "" Then
+                log("Missing database server setting")
+                Return False
+            End If
+
+            If DB_name = "" Then
+                log("Missing initial catalog")
+                Return False
+            End If
         End If
 
         Return True
@@ -63,24 +72,29 @@ Public Class Extractor
 
     Private Function getConnection() As SqlConnection
         Dim cs As New SqlConnectionStringBuilder()
+        Dim cn As SqlConnection
 
-        cs("Server") = DB_server
-        If DB_user <> "" Then
-            cs("user id") = DB_user
-            cs.Password = DB_pwd
+        If DB_connection_string <> "" Then
+            cn = New SqlConnection(DB_connection_string)
         Else
-            cs("Integrated Security") = "true"
+            cs("Server") = DB_server
+            If DB_user <> "" Then
+                cs("user id") = DB_user
+                cs.Password = DB_pwd
+            Else
+                cs("Integrated Security") = "true"
+            End If
+            cs("Initial catalog") = DB_name
+            cn = New SqlConnection(cs.ConnectionString)
         End If
-        cs("Initial catalog") = DB_name
 
-        Dim cn As New SqlConnection(cs.ConnectionString)
         Return cn
     End Function
 
     Function StartExtract() As Integer
 
         If Not checkSettings() Then
-            log("Fehler in den Settings", True)
+            log("Configuration error", True)
             Return 0
         End If
 
@@ -145,14 +159,16 @@ Public Class Extractor
     End Function
 
     Function getHeader() As String
-        Dim hd As String = ""
-        hd &= "--    /--------------------------------------------------- " & vbCrLf
-        hd &= "--    |   Exported by SQL_Def Extractor                                   " & vbCrLf
-        'hd &= "--    |      Date: " & Now.ToShortDateString & " " & Now.ToShortTimeString & vbCrLf
-        hd &= "--    |      Database: " & DB_name & vbCrLf
-        hd &= "--    \--------------------------------------------------- " & vbCrLf & vbCrLf
+        Dim hd As New StringBuilder
+        If output_header Then
+            hd.AppendLine("--    /--------------------------------------------------- ")
+            hd.AppendLine("--    |   Exported by SQL_Def Extractor                                   ")
+            If output_header_timestamp Then hd.AppendLine("--    |      Date: " & Now.ToShortDateString & " " & Now.ToShortTimeString)
+            hd.AppendLine("--    |      Database: " & DB_name)
+            hd.AppendLine("--    \--------------------------------------------------- " & vbCrLf)
+        End If
 
-        Return hd
+        Return hd.ToString
     End Function
 
     Function SaveObjectDef(def As IDataReader)
@@ -164,11 +180,11 @@ Public Class Extractor
 
         If basefolder = "" Then
             basefolder = Directory.GetCurrentDirectory
-            log(" Es wurde kein Ausgabeverzeichnis angegeben, benutze " & basefolder)
+            log(" No output folder configured - will use " & basefolder)
         End If
 
         If definition = "" Then
-            log("   Defnition für " & type & "\" & name & " nicht gespeichert - leer")
+            log("   Definition for " & type & "\" & name & " not saved - is empty")
         Else
             Dim fn As String = Path.Combine(folder_dest, type)
             If Not Directory.Exists(fn) Then Directory.CreateDirectory(fn)
@@ -177,8 +193,50 @@ Public Class Extractor
 
             definition = getHeader() & definition
 
-            File.WriteAllText(fn, definition)
-            log("   Defnition für " & type & "\" & name & " gespeichert")
+            If output_versions > 0 Then
+                preserveFileVersions(fn, definition, output_versions)
+            Else
+                File.WriteAllText(fn, definition)
+            End If
+
+            log("   Definition for " & type & "\" & name & " saved")
+        End If
+
+
+        Return True
+    End Function
+
+    Function preserveFileVersions(filename As String, content As String, maxVersions As Integer) As Boolean
+        'ToDo: Compare content, only create new version, if different - otherwise just touch it
+
+
+        moveFileVersioned(filename, maxVersions, 0)
+        File.WriteAllText(filename, content)
+
+        Return True
+    End Function
+
+    Function getVersionedFilename(filename As String, version As Integer) As String
+        If version > 0 Then
+            Dim dir As String = Path.GetDirectoryName(filename)
+            Return Path.Combine(dir, Path.GetFileNameWithoutExtension(filename) & "_" & version.ToString("000") & Path.GetExtension(filename))
+        Else
+            Return filename
+        End If
+    End Function
+
+
+    Function moveFileVersioned(fromFileName As String, maxVersions As Integer, currentVersion As Integer)
+        Dim filename_ak As String = getVersionedFilename(fromFileName, currentVersion)
+
+        If File.Exists(filename_ak) Then
+            If currentVersion < maxVersions Then
+                moveFileVersioned(fromFileName, maxVersions, currentVersion + 1)
+                File.Move(filename_ak, getVersionedFilename(fromFileName, currentVersion + 1))
+            Else
+                File.Delete(filename_ak)
+            End If
+
         End If
 
 

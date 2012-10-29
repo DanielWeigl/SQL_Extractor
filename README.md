@@ -16,14 +16,19 @@ With SQL_Extractor I have now a quick method to dump all/some definitions to sep
 (all options in one line)
 
     SQL_Extractor 
-       server=<hostname/servername> -- needed
-       db=<databasename>            -- needed
+	   connection=<string>          -- use connection string to specify database
+       server=<hostname/servername> -- needed, if no connection string is given
+       db=<databasename>            -- needed, if no connection string is given
        user=<user>                  -- use system user if omitted
        pwd=<password>               -- needed, if user is set
        dest=<folder>                -- output folder, if omitted, current folder is used
        filter=<name LIKE clause>    -- only export objects which name matches this filter
        type=<type LIKE clause>      -- only export object with this types
        where=<additional WHERE clause>
+
+	   header=<TRUE/false>          -- add own header to view
+	   header_date=<true/FALSE>     -- include date of export in header, att. when using diff. tools
+	   versions=<n>                 -- keep n versions of old files (numbered, 1...n, n=oldest); 0 (default) means overwrite
 
 The *filter* and *type* arguments can be specified more than once - they are OR'ed together.
 
