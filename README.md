@@ -18,7 +18,7 @@ With SQL_Extractor I have now a quick method to dump all/some definitions to sep
     SQL_Extractor 
        server=<hostname/servername> -- needed
        db=<databasename>            -- needed
-       user=<user>                  -- use system user if omitted*
+       user=<user>                  -- use system user if omitted
        pwd=<password>               -- needed, if user is set
        dest=<folder>                -- output folder, if omitted, current folder is used
        filter=<name LIKE clause>    -- only export objects which name matches this filter
@@ -71,14 +71,14 @@ see examples below.
 
 ## Examples
 
-* By commandline:
+**By commandline:**
 
     SQL_Extractor.exe server=localhost db=myData dest=out
 
 
 Will dump all definitions of all Views/StoredProcs/Triggers/... of the Database *myData* into the subfolder *out* in the current directory.
 
-* Via config File:
+**Via config File:**
 
     SQL_Extractor.exe cfg.sql_extract
 
@@ -95,7 +95,7 @@ Content of *cfg.sql_extract*
     filter=my%
     filter=%other%
 
-Will extract all VIEWs which name starts with "**my**" or contains "**other**" into the folder c:\tmp\sql\test1
+Will extract all VIEWs which name starts with "**my**" or contains "**other**" into the folder *c:\tmp\sql\test1*
 
 Content of *cfg.sql_extract*, joining more definitions
 
