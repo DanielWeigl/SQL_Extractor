@@ -47,7 +47,7 @@ Module Main
             End Try
 
         End If
-        Console.ReadLine()
+        'Console.ReadLine()
 
     End Sub
 
@@ -96,7 +96,7 @@ Module Main
         Dim line As String = p.Trim
 
 
-        If line.StartsWith("#") Or line = "" Then
+        If line.StartsWith("#") Or line = "" Or line.StartsWith("--") Then
             ' Comment or empty - ignore
         ElseIf line.StartsWith("[") And line.EndsWith("]") Then
             ' New config section - start a new extractor
