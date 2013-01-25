@@ -191,7 +191,13 @@ Public Class Extractor
 
             fn = Path.Combine(fn, name & ".sql")
 
-            definition = getHeader() & definition
+            Dim head As String = getHeader()
+
+            If definition.StartsWith(head) Then
+                definition = definition.Substring(head.Length)
+            End If
+
+            definition = head & definition.TrimEnd & vbNewLine
 
             If output_versions > 0 Then
                 preserveFileVersions(fn, definition, output_versions)
