@@ -14,7 +14,7 @@ With SQL_Extractor I have now a quick method to dump all/some definitions to sep
 
 ## Download
 
-Use the source to compile your own or download the attached precompiled .exe -> See Tab [Downloads](https://github.com/DanielWeigl/SQL_Extractor/downloads)
+Use the source to compile your own or download the attached precompiled .exe -> See [/compiled-Folder](https://github.com/DanielWeigl/SQL_Extractor/raw/master/compiled/SQL_Extractor.zip)
 
 ## Command Line
 (all options in one line)
