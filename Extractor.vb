@@ -161,11 +161,11 @@ Public Class Extractor
     Function getHeader() As String
         Dim hd As New StringBuilder
         If output_header Then
-            hd.AppendLine("--    /--------------------------------------------------- ")
-            hd.AppendLine("--    |   Exported by SQL_Def Extractor                                   ")
+            hd.AppendLine("--    /----------------------------------------------------------- ")
+            hd.AppendLine("--    |   Exported by SQL_Def Extractor, http://goo.gl/4kPm7")
             If output_header_timestamp Then hd.AppendLine("--    |      Date: " & Now.ToShortDateString & " " & Now.ToShortTimeString)
             hd.AppendLine("--    |      Database: " & DB_name)
-            hd.AppendLine("--    \--------------------------------------------------- " & vbCrLf)
+            hd.AppendLine("--    \----------------------------------------------------------- " & vbCrLf)
         End If
 
         Return hd.ToString
