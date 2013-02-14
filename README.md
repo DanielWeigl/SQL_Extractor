@@ -32,6 +32,7 @@ Use the source to compile your own or download the attached precompiled .exe -> 
 
 	   header=<TRUE/false>          -- add own header to view
 	   header_date=<true/FALSE>     -- include date of export in header, att. when using diff. tools
+	   go=<true/FALSE>              -- add "GO"-Keyword after definition
 	   versions=<n>                 -- keep n versions of old files (numbered, 1...n, n=oldest); 0 (default) means overwrite
 
 The *filter* and *type* arguments can be specified more than once - they are OR'ed together.

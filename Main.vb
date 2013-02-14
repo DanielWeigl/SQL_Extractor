@@ -138,6 +138,8 @@ Module Main
                 current_ex.where = arg
             ElseIf para = "header" Then
                 current_ex.output_header = paraTrue(arg)
+            ElseIf para = "go" Then
+                current_ex.output_go_at_end = paraTrue(arg)
             ElseIf para = "header_date" Then
                 current_ex.output_header_timestamp = paraTrue(arg)
             ElseIf para = "versions" Then

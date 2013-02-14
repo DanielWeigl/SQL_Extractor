@@ -42,6 +42,7 @@ Public Class Extractor
     Public Property output_header As Boolean = True
     Public Property output_header_timestamp As Boolean = False
     Public Property output_versions As Integer = -1
+    Public Property output_go_at_end As Boolean = False
 
     Public Event LogMessage(msg As String, isError As Boolean)
 
@@ -198,6 +199,10 @@ Public Class Extractor
             End If
 
             definition = head & definition.TrimEnd & vbNewLine
+
+            If output_go_at_end Then
+                definition &= vbNewLine & "GO" & vbNewLine
+            End If
 
             If output_versions > 0 Then
                 preserveFileVersions(fn, definition, output_versions)
